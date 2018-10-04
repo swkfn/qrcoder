@@ -4,3 +4,7 @@ version = "0.1.0"
 authors = ["HOME\\swkfn <sw.kfn4410uec@gmail.com>"]
 
 [dependencies]
+clap = "2.31"
+failure = "0.1"
+qrcode = "0.5"
+image = "0.17"
