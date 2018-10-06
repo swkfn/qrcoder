@@ -1,9 +1,10 @@
-extern crate clap;
 extern crate image;
 extern crate qrcode;
 
 #[macro_use]
 extern crate failure;
+#[macro_use]
+extern crate clap;
 
 use std::io;
 use std::path::{Path, PathBuf};
