@@ -29,12 +29,29 @@ enum Command{
 type AppResult<T> = Result<T, AppError>;
 
 #[derive(Debug, Fail)]
-enum AppError {
+enum AppError{
+    // エラーをどう表示するか
     #[fail(display = "qr code error: {}", err)]
-    QrError{ err: QrError },
+    QrError{ 
+        err: QrError,
+    },
 
     #[fail(display = "io error: {}", err)]
-    IoError{ err: io::Error },
+    IoError{
+        err: io::Error,
+    }
+}
+
+impl From<QrError> for AppError{
+    fn from(err: QrError) -> Self{
+        AppError::QrError{ err }
+    }
+}
+
+impl From<io::Error> for AppError{
+    fn from(err: io::Error) -> Self{
+        AppError::IoError{ err }
+    }
 }
 
 fn parse_command() -> AppResult<Command>{
