@@ -2,7 +2,7 @@
 name = "qr_coder"
 version = "0.1.0"
 authors = ["swkfn <sw.kfn4410uec@gmail.com>"]
-description = "Clap Example CLI ref toml"
+description = "Create QRcode from any string"
 
 [dependencies]
 clap = "2.31"
