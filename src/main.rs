@@ -30,7 +30,6 @@ type AppResult<T> = Result<T, AppError>;
 
 #[derive(Debug, Fail)]
 enum AppError{
-    // エラーをどう表示するか
     #[fail(display = "qr code error: {}", err)]
     QrError{ 
         err: QrError,
