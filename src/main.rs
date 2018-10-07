@@ -81,7 +81,6 @@ fn parse_command() -> AppResult<Command>{
     println!("flg is {}", if matches.is_present("flg") {"ON"} else {"OFF"});
 
     // subサブコマンドの解析結果を取得
-
     if let Some(ref matches) = matches.subcommand_matches("sub"){
         println!("used sub"); // subが指定されていればメッセージを表示
         println!("subflg is {}", if matches.is_present("subflg") {"ON"} else {"OFF"});
@@ -96,6 +95,50 @@ fn parse_command() -> AppResult<Command>{
     Ok(Command::GenerateCode(generate_options))
 }
 
+fn output_file(code: &QrCode, path: &Path) -> AppResult<()>{
+    // 画像生成
+    let image = code.render::<Luma<u8>>().build();
+
+    // ファイル出力
+    image.save(path)?;
+
+    Ok(())
+}
+
+fn output_stdout(code: &QrCode) -> AppResult<()>{
+    let text = code.render::<char>()
+        .quiet_zone(false)
+        .module_dimensions(2, 1)
+        .build();
+    println!("{}", text);
+
+    Ok(())
+}
+
+fn generate_code(generate_options: &GenerateOptions) -> AppResult<()>{
+    // QRコード生成
+    let code = QrCode::new(generate_options.text.as_bytes())?;
+
+    // 出力先を指定されていれば画像に, ない場合は標準出力に
+    match generate_options.output.as_ref(){
+        Some(ref path) => output_file(&code, path),
+        None => output_stdout(&code),
+    }
+
+}
+
+fn run() -> AppResult<()>{
+    match parse_command()?{
+        Command::GenerateCode(generate_options) => generate_code(&generate_options),
+    }
+}
+
 fn main(){
-    println!("Hello World");
+    process::exit(match run(){
+        Ok(()) => 0,
+        Err(e) => {
+            eprintln!("error: {}", e);
+            -1
+        }
+    })
 }
